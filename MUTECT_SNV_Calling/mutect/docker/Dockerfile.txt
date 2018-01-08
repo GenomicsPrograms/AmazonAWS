@@ -1,0 +1,26 @@
+﻿FROM python:2.7
+
+ARG VERSION=”12.31.17.01”
+
+# Metadata
+LABEL container.base.image=”python:2.7”
+LABEL software.name=”MuTect2”
+LABEL software.version="12.31.17.01"
+LABEL software.description=”SNVS”
+LABEL software.website="https://software.broadinstitute.org/gatk"
+LABEL software.documentation="https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_gatk_tools_walkers_cancer_m2_MuTect2.php"
+LABEL tags=”Genomics”
+
+# Run statements
+RUN apt-get update && apt-get install -y apt-utils wget default-jre
+RUN pip install boto3 awscli
+
+# Establish working directory
+#WORKDIR /scratch
+#ADD . /scratch
+
+# Copy 
+COPY src /home/ubuntu/ec2-user/tools/src
+COPY common_utils /home/ubuntu/ec2-user/tools/common_utils
+
+ENTRYPOINT ["python", "/home/ubuntu/ec2-user/tools/src/run_mutect.py"]
